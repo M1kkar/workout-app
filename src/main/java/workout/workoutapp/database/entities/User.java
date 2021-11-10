@@ -10,10 +10,16 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Users {
+public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "user_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long user_id;
+    @Column(unique = true)
+    private String email;
+    private String password;
+    private String name;
+    private String surname;
+    private Long age;
+
 
 }

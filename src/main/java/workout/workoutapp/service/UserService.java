@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import workout.workoutapp.config.error.UserAlreadyExistException;
 import workout.workoutapp.config.error.UserDoesNotExistException;
 import workout.workoutapp.config.error.UserPasswordException;
+import workout.workoutapp.database.entities.Diet;
 import workout.workoutapp.database.entities.User;
 import workout.workoutapp.database.repository.UserRepository;
 import workout.workoutapp.transport.converter.UserConverter;
@@ -17,10 +18,16 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final MyProfileService myProfileService;
+    private final BodyMeasurementService bodyMeasurementService;
+    private final DietService dietService;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, MyProfileService myProfileService, BodyMeasurementService bodyMeasurementService, DietService dietService) {
         this.userRepository = userRepository;
+        this.myProfileService = myProfileService;
+        this.bodyMeasurementService = bodyMeasurementService;
+        this.dietService = dietService;
     }
 
     public boolean registerNewAccount(UserDto userToRegister) throws UserAlreadyExistException{
@@ -32,7 +39,9 @@ public class UserService {
         String password = userToRegister.getPassword();
         userToRegister.setPassword(password);
         User userFromDto = UserConverter.toEntity(userToRegister);
-        User savedUser = userRepository.save(userFromDto);
+        userRepository.save(userFromDto);
+        bodyMeasurementService.addDefaultMeasurements(userFromDto);
+        dietService.addDefaultDiet(userFromDto);
         return true;
      }
 

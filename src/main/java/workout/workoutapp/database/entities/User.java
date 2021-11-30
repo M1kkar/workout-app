@@ -19,7 +19,6 @@ public class User {
     private String password;
     private String name;
     private String surname;
-    private Long age;
 
     public User(String email, String password, String name, String surname) {
 

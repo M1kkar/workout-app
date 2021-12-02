@@ -3,7 +3,9 @@ package workout.workoutapp.database.entities;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import java.util.Set;
+
+import java.time.LocalDate;
+import java.util.*;
 
 import javax.persistence.*;
 
@@ -15,13 +17,14 @@ public class WorkoutDay {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long workout_day_id;
+    private LocalDate dateOfTraining;
+    private String nameOfDay;
 
     @ManyToOne
-    @JoinColumn(name="plan_id")
-    private Plan plan;
-    private String dayOfWeek;
+    @JoinColumn(name="user_id")
+    private User user;
 
     @OneToMany(mappedBy="workoutDay")
-    Set<SetOfExercise> setOfExercise;
+    private List<PlanOfExercise> planOfExercises;
 
 }

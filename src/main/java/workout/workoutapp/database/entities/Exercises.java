@@ -17,9 +17,12 @@ public class Exercises {
     private Long exercise_id;
     private String name;
     private String description;
-    private String numberOfSeries;
-    private String numberOfRepetitions;
 
-    @OneToMany(mappedBy="exercises")
-    Set<SetOfExercise> setOfExercise;
+    @ManyToOne
+    @JoinColumn(name="category_id")
+    private Category category;
+
+    public Exercises(String name) {
+        this.name = name;
+    }
 }

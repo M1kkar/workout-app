@@ -10,14 +10,18 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @Entity
-public class SetOfExercise {
+public class PlanOfExercise {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    private Long numberOfRepetitions;
+    private Long numberOfSeries;
+    private Long weight;
 
     @ManyToOne
     @JoinColumn(name="workout_day_id")
     private WorkoutDay workoutDay;
+
 
     @ManyToOne
     @JoinColumn(name="exercise_id")

@@ -42,6 +42,7 @@ public class WorkoutRestController {
 
     @PostMapping(value = "/addWorkoutDay")
     public ResponseEntity<?> addWorkoutDay(@RequestBody WorkoutUserData workoutUserData) {
+
         return ResponseEntity.ok(HttpStatus.OK);
     }
 }

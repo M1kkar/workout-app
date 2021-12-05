@@ -18,7 +18,7 @@ public class PlanOfExercise {
     private Long numberOfSeries;
     private Long weight;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name="workout_day_id")
     private WorkoutDay workoutDay;
 

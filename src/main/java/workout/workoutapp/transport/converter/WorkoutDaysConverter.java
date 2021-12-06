@@ -6,10 +6,10 @@ import workout.workoutapp.transport.dto.WorkoutDaysDto;
 public class WorkoutDaysConverter {
 
     public static WorkoutDay toEntity(WorkoutDaysDto workoutDaysDto){
-        return new WorkoutDay(workoutDaysDto.getDateOfTraining(), workoutDaysDto.getNameOfDay(), workoutDaysDto.getTrainingName(), workoutDaysDto.getUser());
+        return new WorkoutDay(workoutDaysDto.getDateOfTraining(), workoutDaysDto.getTrainingName(), workoutDaysDto.getUser());
     }
 
     public static WorkoutDaysDto toDto(WorkoutDay workoutDay){
-        return new WorkoutDaysDto(workoutDay.getDateOfTraining(), workoutDay.getNameOfDay(), workoutDay.getTrainingName(), workoutDay.getUser());
+        return new WorkoutDaysDto(workoutDay.getDateOfTraining(), workoutDay.getTrainingName(), workoutDay.getUser());
     }
 }

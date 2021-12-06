@@ -3,10 +3,10 @@ package workout.workoutapp.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import workout.workoutapp.database.entities.User;
+import workout.workoutapp.database.entities.WorkoutDay;
 import workout.workoutapp.database.repository.UserRepository;
 import workout.workoutapp.database.repository.WorkoutDayRepository;
-import workout.workoutapp.transport.converter.UserConverter;
-import workout.workoutapp.transport.dto.WorkoutDaysDto;
+import workout.workoutapp.transport.converter.WorkoutDaysConverter;
 import workout.workoutapp.transport.dto.WorkoutUserData;
 
 import java.time.LocalDate;
@@ -23,11 +23,25 @@ public class WorkoutService {
         this.workoutDayRepository = workoutDayRepository;
     }
 
-    public boolean addWorkoutDay(WorkoutUserData WorkoutUserData){
-        Optional<User> byEmail = userRepository.findByEmail(WorkoutUserData.getUserDto().getEmail());
+    public boolean addWorkoutDay(WorkoutUserData workoutUserData){
+        Optional<User> byEmail = userRepository.findByEmail(workoutUserData.getUserData().getEmail());
 
+        if(byEmail.isPresent()) {
 
-        return true;
+            User user = byEmail.get();
+            String name = workoutUserData.getWorkoutData().getTrainingName();
+            LocalDate date = workoutUserData.getWorkoutData().getDateOfTraining();
+
+            workoutUserData.getWorkoutData().setTrainingName(name);
+            workoutUserData.getWorkoutData().setDateOfTraining(date);
+            workoutUserData.getWorkoutData().setUser(user);
+
+            WorkoutDay workoutDay = WorkoutDaysConverter.toEntity(workoutUserData.getWorkoutData());
+            workoutDayRepository.save(workoutDay);
+            return true;
+        }
+
+        return false;
     }
 
 }

@@ -19,16 +19,14 @@ public class WorkoutDay {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long workout_day_id;
     private LocalDate dateOfTraining;
-    private String nameOfDay;
     private String trainingName;
 
     @ManyToOne
     @JoinColumn(name="user_id")
     private User user;
 
-    public WorkoutDay(LocalDate dateOfTraining, String nameOfDay, String trainingName, User user) {
+    public WorkoutDay(LocalDate dateOfTraining, String trainingName, User user) {
         this.dateOfTraining = dateOfTraining;
-        this.nameOfDay = nameOfDay;
         this.trainingName = trainingName;
         this.user = user;
     }

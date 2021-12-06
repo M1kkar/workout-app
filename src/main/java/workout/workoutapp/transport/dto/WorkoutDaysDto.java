@@ -11,13 +11,11 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class WorkoutDaysDto {
     private LocalDate dateOfTraining;
-    private String nameOfDay;
     private String trainingName;
     private User user;
 
-    public WorkoutDaysDto(LocalDate dateOfTraining, String nameOfDay, String trainingName, User user) {
+    public WorkoutDaysDto(LocalDate dateOfTraining, String trainingName, User user) {
         this.dateOfTraining = dateOfTraining;
-        this.nameOfDay = nameOfDay;
         this.trainingName = trainingName;
         this.user = user;
     }

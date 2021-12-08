@@ -3,26 +3,26 @@ package workout.workoutapp.rest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import workout.workoutapp.database.entities.Exercises;
-import workout.workoutapp.database.entities.PlanOfExercise;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import workout.workoutapp.database.entities.User;
 import workout.workoutapp.database.entities.WorkoutDay;
 import workout.workoutapp.database.repository.UserRepository;
 import workout.workoutapp.database.repository.WorkoutDayRepository;
 import workout.workoutapp.service.WorkoutService;
-import workout.workoutapp.transport.converter.UserConverter;
 import workout.workoutapp.transport.converter.WorkoutDaysConverter;
-import workout.workoutapp.transport.dto.ExercisesDto;
 import workout.workoutapp.transport.dto.UserDto;
 import workout.workoutapp.transport.dto.WorkoutDaysDto;
 import workout.workoutapp.transport.dto.WorkoutUserData;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(value="/myTraining")
+@RequestMapping(value = "/myTraining")
 
 public class WorkoutRestController {
 
@@ -49,20 +49,27 @@ public class WorkoutRestController {
     @PostMapping(value = "/addWorkoutDay")
     public ResponseEntity<?> addWorkoutDay(@RequestBody WorkoutUserData workoutUserData) {
         boolean workoutToSave = workoutService.addWorkoutDay(workoutUserData);
-        if(workoutToSave) {
+        if (workoutToSave) {
             return ResponseEntity.ok(HttpStatus.OK);
-        }else
+        } else return ResponseEntity.badRequest().build();
+    }
+
+    @PostMapping(value = "/deleteDay")
+    public ResponseEntity<?> deleteExercise(@RequestBody WorkoutDaysDto workoutDaysDto) throws Exception {
+     /*   Optional<User> byEmail = userRepository.findByEmail(workoutDaysDto.getUser().getEmail());
+        Optional<WorkoutDay> byName = workoutDayRepository.findByTrainingNameAndUser(workoutDaysDto.getTrainingName(), byEmail.get());
+
+        WorkoutDay workoutDay = byName.get();
+        Long id = workoutDay.getWorkout_day_id();
+        workoutDayRepository.deleteById(id);*/
+
+        boolean trainingToDelete = workoutService.deleteWorkoutDay(workoutDaysDto);
+
+        if(trainingToDelete){
+            return ResponseEntity.ok(HttpStatus.OK);
+        } else{
             return ResponseEntity.badRequest().build();
-    }
+        }
 
-    @DeleteMapping(value = "/deleteDay")
-    public ResponseEntity<?> getAllExercises(@RequestBody WorkoutDaysDto workoutDaysDto){
-        WorkoutDay workoutDay = WorkoutDaysConverter.toEntity(workoutDaysDto);
-        Long workoutId = workoutDay.getWorkout_day_id();
-        workoutDayRepository.deleteById(workoutId);
-
-        return ResponseEntity.ok(HttpStatus.OK);
-
-
-    }
+}
 }

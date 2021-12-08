@@ -6,10 +6,16 @@ import workout.workoutapp.database.entities.User;
 import workout.workoutapp.database.entities.WorkoutDay;
 
 
+
 import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface WorkoutDayRepository extends JpaRepository<WorkoutDay, Long> {
     List<WorkoutDay> findAllByUser(User user);
+
+    Optional<WorkoutDay> findByTrainingNameAndUser(String name, User user);
+
+
+
 }

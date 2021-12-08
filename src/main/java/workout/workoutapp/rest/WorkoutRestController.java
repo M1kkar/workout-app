@@ -8,13 +8,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import workout.workoutapp.database.entities.User;
-import workout.workoutapp.database.entities.WorkoutDay;
 import workout.workoutapp.database.repository.UserRepository;
 import workout.workoutapp.database.repository.WorkoutDayRepository;
 import workout.workoutapp.service.WorkoutService;
 import workout.workoutapp.transport.converter.WorkoutDaysConverter;
 import workout.workoutapp.transport.dto.UserDto;
-import workout.workoutapp.transport.dto.WorkoutDaysDto;
+import workout.workoutapp.transport.dto.WorkoutDayDto;
 import workout.workoutapp.transport.dto.WorkoutUserData;
 
 import java.util.List;
@@ -38,10 +37,10 @@ public class WorkoutRestController {
     }
 
     @PostMapping(value = "/workoutDays")
-    public ResponseEntity<List<WorkoutDaysDto>> allWorkoutDays(@RequestBody UserDto userDto) {
+    public ResponseEntity<List<WorkoutDayDto>> allWorkoutDays(@RequestBody UserDto userDto) {
         Optional<User> byEmail = userRepository.findByEmail(userDto.getEmail());
 
-        List<WorkoutDaysDto> allDays = workoutDayRepository.findAllByUser(byEmail.get()).stream().map(WorkoutDaysConverter::toDto).collect(Collectors.toList());
+        List<WorkoutDayDto> allDays = workoutDayRepository.findAllByUser(byEmail.get()).stream().map(WorkoutDaysConverter::toDto).collect(Collectors.toList());
 
         return ResponseEntity.ok(allDays);
     }
@@ -55,7 +54,7 @@ public class WorkoutRestController {
     }
 
     @PostMapping(value = "/deleteDay")
-    public ResponseEntity<?> deleteExercise(@RequestBody WorkoutDaysDto workoutDaysDto) throws Exception {
+    public ResponseEntity<?> deleteExercise(@RequestBody WorkoutDayDto workoutDaysDto) throws Exception {
      /*   Optional<User> byEmail = userRepository.findByEmail(workoutDaysDto.getUser().getEmail());
         Optional<WorkoutDay> byName = workoutDayRepository.findByTrainingNameAndUser(workoutDaysDto.getTrainingName(), byEmail.get());
 

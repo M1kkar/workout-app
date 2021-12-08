@@ -11,9 +11,9 @@ import lombok.Setter;
 @Setter
 public class WorkoutUserData {
     private UserDto userData;
-    private WorkoutDaysDto workoutData;
+    private WorkoutDayDto workoutData;
 
-    public WorkoutUserData(UserDto userDto, WorkoutDaysDto workoutDaysDto) {
+    public WorkoutUserData(UserDto userDto, WorkoutDayDto workoutDaysDto) {
         this.userData = userDto;
         this.workoutData = workoutDaysDto;
     }

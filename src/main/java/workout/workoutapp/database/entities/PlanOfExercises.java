@@ -1,8 +1,6 @@
 package workout.workoutapp.database.entities;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -10,7 +8,9 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @Entity
-public class PlanOfExercise {
+@AllArgsConstructor
+@Builder
+public class PlanOfExercises {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -26,4 +26,12 @@ public class PlanOfExercise {
     @ManyToOne
     @JoinColumn(name="exercise_id")
     private Exercises exercises;
+
+    public PlanOfExercises(Long numberOfRepetitions, Long numberOfSeries, Long weight, WorkoutDay workoutDay, Exercises exercises) {
+        this.numberOfRepetitions = numberOfRepetitions;
+        this.numberOfSeries = numberOfSeries;
+        this.weight = weight;
+        this.workoutDay = workoutDay;
+        this.exercises = exercises;
+    }
 }

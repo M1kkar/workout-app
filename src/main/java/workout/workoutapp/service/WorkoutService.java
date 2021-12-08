@@ -3,14 +3,13 @@ package workout.workoutapp.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import workout.workoutapp.config.error.WorkoutDayNameAlreadyExist;
-import workout.workoutapp.database.entities.PlanOfExercise;
+import workout.workoutapp.database.entities.PlanOfExercises;
 import workout.workoutapp.database.entities.User;
-import workout.workoutapp.database.entities.WorkoutDay;
 import workout.workoutapp.database.repository.PlanOfExercisesRepository;
 import workout.workoutapp.database.repository.UserRepository;
 import workout.workoutapp.database.repository.WorkoutDayRepository;
 import workout.workoutapp.transport.converter.WorkoutDaysConverter;
-import workout.workoutapp.transport.dto.WorkoutDaysDto;
+import workout.workoutapp.transport.dto.WorkoutDayDto;
 import workout.workoutapp.transport.dto.WorkoutUserData;
 
 import java.time.LocalDate;
@@ -39,7 +38,7 @@ public class WorkoutService {
             User user = byEmail.get();
             String name = workoutUserData.getWorkoutData().getTrainingName();
 
-            Optional<WorkoutDay> byNameForUser = workoutDayRepository.findByTrainingNameAndUser(name, user);
+            Optional<workout.workoutapp.database.entities.WorkoutDay> byNameForUser = workoutDayRepository.findByTrainingNameAndUser(name, user);
             if (byNameForUser.isPresent()) {
                 throw new WorkoutDayNameAlreadyExist("Name already exist");
 
@@ -51,7 +50,7 @@ public class WorkoutService {
                 workoutUserData.getWorkoutData().setDateOfTraining(date);
                 workoutUserData.getWorkoutData().setUser(user);
 
-                WorkoutDay workoutDay = WorkoutDaysConverter.toEntity(workoutUserData.getWorkoutData());
+                workout.workoutapp.database.entities.WorkoutDay workoutDay = WorkoutDaysConverter.toEntity(workoutUserData.getWorkoutData());
                 workoutDayRepository.save(workoutDay);
                 return true;
 
@@ -62,17 +61,17 @@ public class WorkoutService {
 
     }
 
-    public boolean deleteWorkoutDay(WorkoutDaysDto workoutDaysDto) throws Exception {
+    public boolean deleteWorkoutDay(WorkoutDayDto workoutDaysDto) throws Exception {
         Optional<User> byEmail = userRepository.findByEmail(workoutDaysDto.getUser().getEmail());
-        Optional<WorkoutDay> byName = workoutDayRepository.findByTrainingNameAndUser(workoutDaysDto.getTrainingName(), byEmail.get());
+        Optional<workout.workoutapp.database.entities.WorkoutDay> byName = workoutDayRepository.findByTrainingNameAndUser(workoutDaysDto.getTrainingName(), byEmail.get());
 
 
         if (byName.isEmpty()) {
             throw new NoSuchElementException("Empty");
         } else {
 
-            WorkoutDay workoutDay = byName.get();
-            List<PlanOfExercise> byWorkoutDay = planOfExercisesRepository.findAllByWorkoutDay(workoutDay);
+            workout.workoutapp.database.entities.WorkoutDay workoutDay = byName.get();
+            List<PlanOfExercises> byWorkoutDay = planOfExercisesRepository.findAllByWorkoutDay(workoutDay);
 
             planOfExercisesRepository.deleteAll(byWorkoutDay);
             Long id = workoutDay.getWorkout_day_id();

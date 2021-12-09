@@ -16,6 +16,8 @@ public interface WorkoutDayRepository extends JpaRepository<WorkoutDay, Long> {
 
     Optional<WorkoutDay> findByTrainingNameAndUser(String name, User user);
 
+    Optional<WorkoutDay> findByTrainingName(String name);
+
 
 
 }

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import workout.workoutapp.config.error.WorkoutDayNameAlreadyExist;
 import workout.workoutapp.database.entities.PlanOfExercises;
 import workout.workoutapp.database.entities.User;
+import workout.workoutapp.database.entities.WorkoutDay;
 import workout.workoutapp.database.repository.PlanOfExercisesRepository;
 import workout.workoutapp.database.repository.UserRepository;
 import workout.workoutapp.database.repository.WorkoutDayRepository;
@@ -38,7 +39,7 @@ public class WorkoutService {
             User user = byEmail.get();
             String name = workoutUserData.getWorkoutData().getTrainingName();
 
-            Optional<workout.workoutapp.database.entities.WorkoutDay> byNameForUser = workoutDayRepository.findByTrainingNameAndUser(name, user);
+            Optional<WorkoutDay> byNameForUser = workoutDayRepository.findByTrainingNameAndUser(name, user);
             if (byNameForUser.isPresent()) {
                 throw new WorkoutDayNameAlreadyExist("Name already exist");
 
@@ -50,7 +51,7 @@ public class WorkoutService {
                 workoutUserData.getWorkoutData().setDateOfTraining(date);
                 workoutUserData.getWorkoutData().setUser(user);
 
-                workout.workoutapp.database.entities.WorkoutDay workoutDay = WorkoutDaysConverter.toEntity(workoutUserData.getWorkoutData());
+               WorkoutDay workoutDay = WorkoutDaysConverter.toEntity(workoutUserData.getWorkoutData());
                 workoutDayRepository.save(workoutDay);
                 return true;
 
@@ -63,14 +64,14 @@ public class WorkoutService {
 
     public boolean deleteWorkoutDay(WorkoutDayDto workoutDaysDto) throws Exception {
         Optional<User> byEmail = userRepository.findByEmail(workoutDaysDto.getUser().getEmail());
-        Optional<workout.workoutapp.database.entities.WorkoutDay> byName = workoutDayRepository.findByTrainingNameAndUser(workoutDaysDto.getTrainingName(), byEmail.get());
+        Optional<WorkoutDay> byName = workoutDayRepository.findByTrainingNameAndUser(workoutDaysDto.getTrainingName(), byEmail.get());
 
 
         if (byName.isEmpty()) {
             throw new NoSuchElementException("Empty");
         } else {
 
-            workout.workoutapp.database.entities.WorkoutDay workoutDay = byName.get();
+            WorkoutDay workoutDay = byName.get();
             List<PlanOfExercises> byWorkoutDay = planOfExercisesRepository.findAllByWorkoutDay(workoutDay);
 
             planOfExercisesRepository.deleteAll(byWorkoutDay);

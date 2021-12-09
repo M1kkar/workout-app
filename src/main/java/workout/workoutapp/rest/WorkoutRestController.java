@@ -55,13 +55,6 @@ public class WorkoutRestController {
 
     @PostMapping(value = "/deleteDay")
     public ResponseEntity<?> deleteExercise(@RequestBody WorkoutDayDto workoutDaysDto) throws Exception {
-     /*   Optional<User> byEmail = userRepository.findByEmail(workoutDaysDto.getUser().getEmail());
-        Optional<WorkoutDay> byName = workoutDayRepository.findByTrainingNameAndUser(workoutDaysDto.getTrainingName(), byEmail.get());
-
-        WorkoutDay workoutDay = byName.get();
-        Long id = workoutDay.getWorkout_day_id();
-        workoutDayRepository.deleteById(id);*/
-
         boolean trainingToDelete = workoutService.deleteWorkoutDay(workoutDaysDto);
 
         if(trainingToDelete){

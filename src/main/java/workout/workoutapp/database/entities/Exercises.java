@@ -22,7 +22,8 @@ public class Exercises {
     @JoinColumn(name="category_id")
     private Category category;
 
-    public Exercises(String name) {
+    public Exercises(String name, String description) {
         this.name = name;
+        this.description = description;
     }
 }

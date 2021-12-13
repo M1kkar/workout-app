@@ -1,9 +1,11 @@
-package workout.workoutapp.transport.dto;
+package workout.workoutapp.transport.moreobjects;
 
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import workout.workoutapp.transport.dto.UserDto;
+import workout.workoutapp.transport.dto.WorkoutDayDto;
 
 @Data
 @NoArgsConstructor

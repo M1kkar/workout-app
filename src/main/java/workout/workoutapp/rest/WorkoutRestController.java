@@ -14,7 +14,7 @@ import workout.workoutapp.service.WorkoutService;
 import workout.workoutapp.transport.converter.WorkoutDaysConverter;
 import workout.workoutapp.transport.dto.UserDto;
 import workout.workoutapp.transport.dto.WorkoutDayDto;
-import workout.workoutapp.transport.dto.WorkoutUserData;
+import workout.workoutapp.transport.moreobjects.WorkoutUserData;
 
 import java.util.List;
 import java.util.Optional;

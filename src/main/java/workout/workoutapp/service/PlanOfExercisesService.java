@@ -10,7 +10,8 @@ import workout.workoutapp.database.repository.ExerciseRepository;
 import workout.workoutapp.database.repository.PlanOfExercisesRepository;
 import workout.workoutapp.database.repository.UserRepository;
 import workout.workoutapp.database.repository.WorkoutDayRepository;
-import workout.workoutapp.transport.dto.DataToAddExercise;
+import workout.workoutapp.transport.moreobjects.DataToAddExercise;
+import workout.workoutapp.transport.moreobjects.DataToDeleteExercise;
 
 import java.util.Optional;
 
@@ -36,6 +37,11 @@ public class PlanOfExercisesService {
 
         Optional<Exercises> byExerciseName = exerciseRepository.findAllByName(addExercise.getExerciseName());
 
+        Optional<PlanOfExercises> byExerciseAndDay = planOfExercisesRepository.findByExercisesAndWorkoutDay(byExerciseName.get(), byUserAndName.get());
+        if(byExerciseAndDay.isPresent()){
+            return false;
+        }
+
         Long weight = addExercise.getPlanOfExercises().getWeight();
         Long numberOfRepetition = addExercise.getPlanOfExercises().getNumberOfRepetitions();
         Long numberOfSeries = addExercise.getPlanOfExercises().getNumberOfSeries();
@@ -49,6 +55,15 @@ public class PlanOfExercisesService {
                 .build();
 
         planOfExercisesRepository.save(planOfExercisesBuilder);
+        return true;
+    }
+
+    public boolean deleteExerciseFromDay(DataToDeleteExercise dataToDeleteExercise){
+        Optional<WorkoutDay> workoutDay = workoutDayRepository.findById(dataToDeleteExercise.getWorkoutDay().getWorkout_day_id());
+        Optional<Exercises> exercises = exerciseRepository.findById(dataToDeleteExercise.getExercises().getExercise_id());
+
+        Optional<PlanOfExercises> byExercisesAndWorkoutDay = planOfExercisesRepository.findByExercisesAndWorkoutDay(exercises.get(), workoutDay.get());
+        planOfExercisesRepository.delete(byExercisesAndWorkoutDay.get());
         return true;
     }
 }

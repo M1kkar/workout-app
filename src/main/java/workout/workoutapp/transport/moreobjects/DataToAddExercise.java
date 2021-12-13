@@ -1,9 +1,10 @@
-package workout.workoutapp.transport.dto;
+package workout.workoutapp.transport.moreobjects;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import workout.workoutapp.database.entities.PlanOfExercises;
 import workout.workoutapp.database.entities.User;
+import workout.workoutapp.transport.dto.UserDto;
 
 @Data
 @NoArgsConstructor

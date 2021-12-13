@@ -11,7 +11,7 @@ import workout.workoutapp.database.repository.UserRepository;
 import workout.workoutapp.database.repository.WorkoutDayRepository;
 import workout.workoutapp.transport.converter.WorkoutDaysConverter;
 import workout.workoutapp.transport.dto.WorkoutDayDto;
-import workout.workoutapp.transport.dto.WorkoutUserData;
+import workout.workoutapp.transport.moreobjects.WorkoutUserData;
 
 import java.time.LocalDate;
 import java.util.List;

@@ -9,9 +9,8 @@ import workout.workoutapp.database.entities.Exercises;
 import workout.workoutapp.database.repository.CategoryRepository;
 import workout.workoutapp.database.repository.ExerciseRepository;
 import workout.workoutapp.service.PlanOfExercisesService;
-import workout.workoutapp.transport.dto.DataToAddExercise;
+import workout.workoutapp.transport.moreobjects.DataToAddExercise;
 
-import javax.xml.crypto.Data;
 import java.util.*;
 
 @RestController
@@ -45,13 +44,5 @@ public class ExercisesRestController {
 
         return ResponseEntity.ok(allNames);
     }
-    @PostMapping(value = "/addExercises")
-    public ResponseEntity<?> addExercises(@RequestBody DataToAddExercise addExercise){
-        boolean add = planOfExercisesService.addExercisesToDay(addExercise);
-        if(add){
-            return ResponseEntity.ok(HttpStatus.OK);
-        } else{
-            return ResponseEntity.badRequest().build();
-        }
-    }
+
 }

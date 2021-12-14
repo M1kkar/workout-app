@@ -23,4 +23,11 @@ public class Diet {
     @JoinColumn(name="user_id")
     private User user;
 
+    public Diet(Long kcal, Long protein, Long fat, Long carbohydrates, User user) {
+        this.kcal = kcal;
+        this.protein = protein;
+        this.fat = fat;
+        this.carbohydrates = carbohydrates;
+        this.user = user;
+    }
 }

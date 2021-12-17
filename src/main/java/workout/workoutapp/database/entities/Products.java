@@ -19,12 +19,12 @@ public class Products {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long product_id;
     private String productName;
-    private double kcal;
-    private double protein;
-    private double fat;
-    private double carbohydrate;
+    private float kcal;
+    private float protein;
+    private float fat;
+    private float carbohydrate;
 
-    public Products(String productName, double kcal, double protein, double fat, double carbohydrate) {
+    public Products(String productName, float kcal, float protein, float fat, float carbohydrate) {
         this.productName = productName;
         this.kcal = kcal;
         this.protein = protein;

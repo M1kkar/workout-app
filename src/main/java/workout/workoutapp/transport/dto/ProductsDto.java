@@ -8,8 +8,16 @@ import lombok.Data;
 public class ProductsDto {
 
     private String productName;
-    private double kcal;
-    private double protein;
-    private double fat;
-    private double carbohydrate;
+    private float kcal;
+    private float protein;
+    private float fat;
+    private float carbohydrate;
+
+    public ProductsDto(String productName, float kcal, float protein, float fat, float carbohydrate) {
+        this.productName = productName;
+        this.kcal = kcal;
+        this.protein = protein;
+        this.fat = fat;
+        this.carbohydrate = carbohydrate;
+    }
 }

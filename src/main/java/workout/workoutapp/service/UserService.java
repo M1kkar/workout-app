@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import workout.workoutapp.config.error.UserAlreadyExistException;
 import workout.workoutapp.config.error.UserDoesNotExistException;
 import workout.workoutapp.config.error.UserPasswordException;
-import workout.workoutapp.database.entities.Diet;
 import workout.workoutapp.database.entities.User;
 import workout.workoutapp.database.repository.UserRepository;
 import workout.workoutapp.transport.converter.UserConverter;
@@ -18,22 +17,20 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final MyProfileService myProfileService;
     private final BodyMeasurementService bodyMeasurementService;
     private final DietService dietService;
 
     @Autowired
-    public UserService(UserRepository userRepository, MyProfileService myProfileService, BodyMeasurementService bodyMeasurementService, DietService dietService) {
+    public UserService(UserRepository userRepository, BodyMeasurementService bodyMeasurementService, DietService dietService) {
         this.userRepository = userRepository;
-        this.myProfileService = myProfileService;
         this.bodyMeasurementService = bodyMeasurementService;
         this.dietService = dietService;
     }
 
-    public boolean registerNewAccount(UserDto userToRegister) throws UserAlreadyExistException{
+    public boolean registerNewAccount(UserDto userToRegister) throws UserAlreadyExistException {
         Optional<User> byEmail = findByEmail(userToRegister.getEmail());
 
-        if(byEmail.isPresent()){
+        if (byEmail.isPresent()) {
             throw new UserAlreadyExistException("User exists");
         }
         String password = userToRegister.getPassword();
@@ -43,16 +40,16 @@ public class UserService {
         bodyMeasurementService.addDefaultMeasurements(userFromDto);
         dietService.addDefaultDiet(userFromDto);
         return true;
-     }
+    }
 
-     public User loginUser(String email, String password) throws UserDoesNotExistException, UserPasswordException{
-        return findByEmail(email).map(u-> {
-            if(!(Objects.equals(password, u.getPassword()))){
+    public User loginUser(String email, String password) throws UserDoesNotExistException, UserPasswordException {
+        return findByEmail(email).map(u -> {
+            if (!(Objects.equals(password, u.getPassword()))) {
                 throw new UserPasswordException("Password incorrect");
             }
             return u;
         }).orElseThrow(() -> new UserDoesNotExistException("User not found"));
-     }
+    }
 
 
     private Optional<User> findByEmail(String email) {

@@ -3,9 +3,7 @@ package workout.workoutapp.transport.dto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import workout.workoutapp.database.entities.BodyMeasurements;
-import workout.workoutapp.database.entities.User;
 
-import java.util.*;
 import java.util.Optional;
 
 @Data

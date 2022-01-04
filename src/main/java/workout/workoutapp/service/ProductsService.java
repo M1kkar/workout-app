@@ -11,7 +11,6 @@ import workout.workoutapp.database.repository.ProductsRepository;
 import workout.workoutapp.transport.converter.ProductsConverter;
 import workout.workoutapp.transport.dto.ProductsDto;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -47,16 +46,16 @@ public class ProductsService {
         }
     }
 
-    public boolean addProductToDay(ProductsInDay productsInDay){
+    public boolean addProductToDay(ProductsInDay productsInDay) {
         Optional<Diet> diet = dietRepository.findByUser(productsInDay.getDiet().getUser());
         Optional<Products> product = productsRepository.findByProductName(productsInDay.getProducts().getProductName());
 
         float size = productsInDay.getProductSize();
 
-        float kcal = product.get().getKcal() * (size/100);
-        float protein = product.get().getProtein() * (size/100);
-        float fat = product.get().getFat() * (size/100);
-        float carbohydrate = product.get().getCarbohydrate() * (size/100);
+        float kcal = product.get().getKcal() * (size / 100);
+        float protein = product.get().getProtein() * (size / 100);
+        float fat = product.get().getFat() * (size / 100);
+        float carbohydrate = product.get().getCarbohydrate() * (size / 100);
         LocalDateTime now = LocalDateTime.now();
 
         ProductsInDay productsInDayBuilder = ProductsInDay.builder()

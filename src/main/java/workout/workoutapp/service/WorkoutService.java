@@ -20,9 +20,9 @@ import java.util.Optional;
 
 @Service
 public class WorkoutService {
-    private UserRepository userRepository;
-    private WorkoutDayRepository workoutDayRepository;
-    private PlanOfExercisesRepository planOfExercisesRepository;
+    private final UserRepository userRepository;
+    private final WorkoutDayRepository workoutDayRepository;
+    private final PlanOfExercisesRepository planOfExercisesRepository;
 
     @Autowired
     public WorkoutService(UserRepository userRepository, WorkoutDayRepository workoutDayRepository, PlanOfExercisesRepository planOfExercisesRepository) {
@@ -51,7 +51,7 @@ public class WorkoutService {
                 workoutUserData.getWorkoutData().setDateOfTraining(date);
                 workoutUserData.getWorkoutData().setUser(user);
 
-               WorkoutDay workoutDay = WorkoutDaysConverter.toEntity(workoutUserData.getWorkoutData());
+                WorkoutDay workoutDay = WorkoutDaysConverter.toEntity(workoutUserData.getWorkoutData());
                 workoutDayRepository.save(workoutDay);
                 return true;
 
@@ -62,23 +62,25 @@ public class WorkoutService {
 
     }
 
-    public boolean deleteWorkoutDay(WorkoutDayDto workoutDaysDto) throws Exception {
+    public boolean deleteWorkoutDay(WorkoutDayDto workoutDaysDto) {
         Optional<User> byEmail = userRepository.findByEmail(workoutDaysDto.getUser().getEmail());
-        Optional<WorkoutDay> byName = workoutDayRepository.findByTrainingNameAndUser(workoutDaysDto.getTrainingName(), byEmail.get());
+        if (byEmail.isPresent()) {
+            Optional<WorkoutDay> byName = workoutDayRepository.findByTrainingNameAndUser(workoutDaysDto.getTrainingName(), byEmail.get());
+            if (byName.isEmpty()) {
+                throw new NoSuchElementException("Empty");
+            } else {
 
+                WorkoutDay workoutDay = byName.get();
+                List<PlanOfExercises> byWorkoutDay = planOfExercisesRepository.findAllByWorkoutDay(workoutDay);
 
-        if (byName.isEmpty()) {
-            throw new NoSuchElementException("Empty");
-        } else {
+                planOfExercisesRepository.deleteAll(byWorkoutDay);
+                Long id = workoutDay.getWorkout_day_id();
+                workoutDayRepository.deleteById(id);
 
-            WorkoutDay workoutDay = byName.get();
-            List<PlanOfExercises> byWorkoutDay = planOfExercisesRepository.findAllByWorkoutDay(workoutDay);
+            }
 
-            planOfExercisesRepository.deleteAll(byWorkoutDay);
-            Long id = workoutDay.getWorkout_day_id();
-            workoutDayRepository.deleteById(id);
-            return true;
         }
+        return true;
     }
 
 }

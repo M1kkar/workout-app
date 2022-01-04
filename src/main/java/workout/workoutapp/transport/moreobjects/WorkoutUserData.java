@@ -15,8 +15,4 @@ public class WorkoutUserData {
     private UserDto userData;
     private WorkoutDayDto workoutData;
 
-    public WorkoutUserData(UserDto userDto, WorkoutDayDto workoutDaysDto) {
-        this.userData = userDto;
-        this.workoutData = workoutDaysDto;
-    }
 }

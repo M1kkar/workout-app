@@ -4,27 +4,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import workout.workoutapp.database.entities.Exercises;
 import workout.workoutapp.database.entities.PlanOfExercises;
 import workout.workoutapp.database.entities.User;
 import workout.workoutapp.database.entities.WorkoutDay;
-import workout.workoutapp.database.repository.ExerciseRepository;
 import workout.workoutapp.database.repository.PlanOfExercisesRepository;
 import workout.workoutapp.database.repository.UserRepository;
 import workout.workoutapp.database.repository.WorkoutDayRepository;
 import workout.workoutapp.service.PlanOfExercisesService;
 import workout.workoutapp.transport.converter.PlanOfExercisesConverter;
-import workout.workoutapp.transport.converter.WorkoutDaysConverter;
 import workout.workoutapp.transport.dto.PlanOfExercisesDto;
-import workout.workoutapp.transport.dto.WorkoutDayDto;
 import workout.workoutapp.transport.moreobjects.DataToAddExercise;
 import workout.workoutapp.transport.moreobjects.DataToDeleteExercise;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping(value="/planOfExercises")
+@RequestMapping(value = "/planOfExercises")
 public class PlanOfExercisesController {
 
     private final PlanOfExercisesRepository planOfExercisesRepository;
@@ -64,11 +60,11 @@ public class PlanOfExercisesController {
     }
 
     @PostMapping(value = "/deleteExercise")
-    public ResponseEntity<?> deleteExercise(@RequestBody DataToDeleteExercise dataToDeleteExercise){
+    public ResponseEntity<?> deleteExercise(@RequestBody DataToDeleteExercise dataToDeleteExercise) {
         boolean delete = planOfExercisesService.deleteExerciseFromDay(dataToDeleteExercise);
-        if(delete){
+        if (delete) {
             return ResponseEntity.ok(HttpStatus.OK);
-        } else{
+        } else {
             return ResponseEntity.badRequest().build();
         }
     }

@@ -7,10 +7,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ExercisesDto {
     private String name;
-    private String description;
 
-    public ExercisesDto(String name, String description) {
+
+    public ExercisesDto(String name) {
         this.name = name;
-        this.description = description;
+
     }
 }

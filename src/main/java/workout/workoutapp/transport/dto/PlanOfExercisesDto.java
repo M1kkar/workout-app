@@ -5,10 +5,6 @@ import lombok.NoArgsConstructor;
 import workout.workoutapp.database.entities.Exercises;
 import workout.workoutapp.database.entities.WorkoutDay;
 
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-
 @Data
 @NoArgsConstructor
 public class PlanOfExercisesDto {

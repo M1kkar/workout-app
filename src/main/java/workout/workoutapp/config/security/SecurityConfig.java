@@ -13,8 +13,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests()
-                .antMatchers("/register", "/login", "/dashboard", "/myProfile/**", "/myDiet", "/exercises/**",  "/myTraining/**", "/planOfExercises/**", "/myDiet/**",
-                             "/products/**").permitAll()
+                .antMatchers("/register",
+                        "/login",
+                        "/dashboard",
+                        "/myProfile/**",
+                        "/myDiet",
+                        "/exercises/**",
+                        "/myTraining/**",
+                        "/planOfExercises/**",
+                        "/myDiet/**",
+                        "/products/**").permitAll()
                 .anyRequest().authenticated();
     }
 }

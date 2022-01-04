@@ -3,29 +3,20 @@ package workout.workoutapp.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import workout.workoutapp.database.entities.Diet;
-import workout.workoutapp.database.entities.ProductsInDay;
 import workout.workoutapp.database.entities.User;
 import workout.workoutapp.database.repository.DietRepository;
-import workout.workoutapp.database.repository.ProductsInDayRepository;
-import workout.workoutapp.database.repository.UserRepository;
 import workout.workoutapp.transport.dto.DietDto;
-import workout.workoutapp.transport.dto.SumOfAll;
-import workout.workoutapp.transport.dto.UserDto;
 
-import java.time.LocalDate;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @Service
 public class DietService {
     private final DietRepository dietRepository;
-    private final UserRepository userRepository;
 
 
     @Autowired
-    public DietService(DietRepository dietRepository, UserRepository userRepository) {
+    public DietService(DietRepository dietRepository) {
         this.dietRepository = dietRepository;
-        this.userRepository = userRepository;
 
     }
 

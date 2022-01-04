@@ -54,7 +54,7 @@ public class WorkoutRestController {
     }
 
     @PostMapping(value = "/deleteDay")
-    public ResponseEntity<?> deleteExercise(@RequestBody WorkoutDayDto workoutDaysDto) throws Exception {
+    public ResponseEntity<?> deleteExercise(@RequestBody WorkoutDayDto workoutDaysDto) {
         boolean trainingToDelete = workoutService.deleteWorkoutDay(workoutDaysDto);
 
         if(trainingToDelete){

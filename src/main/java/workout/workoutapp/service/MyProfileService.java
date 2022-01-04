@@ -21,10 +21,10 @@ public class MyProfileService {
     }
 
 
-    public boolean updatePasswordForEmail(String email, String newPassword){
+    public boolean updatePasswordForEmail(String email, String newPassword) {
         Optional<User> byEmail = userRepository.findByEmail(email);
 
-        if(byEmail.isPresent()){
+        if (byEmail.isPresent()) {
             User user = byEmail.get();
             user.setPassword(newPassword);
             userRepository.save(user);

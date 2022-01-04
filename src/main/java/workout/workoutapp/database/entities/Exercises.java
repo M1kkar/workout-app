@@ -15,15 +15,15 @@ public class Exercises {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long exercise_id;
+    private String link;
     private String name;
-    private String description;
 
     @ManyToOne
     @JoinColumn(name="category_id")
     private Category category;
 
-    public Exercises(String name, String description) {
+    public Exercises(String name) {
         this.name = name;
-        this.description = description;
+
     }
 }

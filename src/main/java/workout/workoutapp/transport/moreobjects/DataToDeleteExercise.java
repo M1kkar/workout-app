@@ -11,8 +11,4 @@ public class DataToDeleteExercise {
     private Exercises exercises;
     private WorkoutDay workoutDay;
 
-    public DataToDeleteExercise(Exercises exercises, WorkoutDay workoutDay) {
-        this.exercises = exercises;
-        this.workoutDay = workoutDay;
-    }
 }

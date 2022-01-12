@@ -1,6 +1,7 @@
 package workout.workoutapp.transport.dto;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data

@@ -13,6 +13,7 @@ import javax.persistence.Id;
 @Entity
 @AllArgsConstructor
 @Builder
+@Data
 public class Products {
 
     @Id

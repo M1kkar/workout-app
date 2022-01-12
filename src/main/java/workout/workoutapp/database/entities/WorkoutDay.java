@@ -1,5 +1,6 @@
 package workout.workoutapp.database.entities;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,7 +14,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Setter
 @Getter
-
+@Data
 public class WorkoutDay {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,6 +27,13 @@ public class WorkoutDay {
     private User user;
 
     public WorkoutDay(LocalDate dateOfTraining, String trainingName, User user) {
+        this.dateOfTraining = dateOfTraining;
+        this.trainingName = trainingName;
+        this.user = user;
+    }
+
+    public WorkoutDay(Long workout_day_id, LocalDate dateOfTraining, String trainingName, User user) {
+        this.workout_day_id = workout_day_id;
         this.dateOfTraining = dateOfTraining;
         this.trainingName = trainingName;
         this.user = user;

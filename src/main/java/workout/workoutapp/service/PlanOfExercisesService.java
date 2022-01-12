@@ -33,9 +33,13 @@ public class PlanOfExercisesService {
 
     public boolean addExercisesToDay(DataToAddExercise addExercise){
         Optional<User> byEmail = userRepository.findByEmail(addExercise.getUser().getEmail());
+        if(byEmail.isEmpty()){return false;}
+
         Optional<WorkoutDay> byUserAndName = workoutDayRepository.findByTrainingNameAndUser(addExercise.getTrainingName(), byEmail.get());
+        if(byUserAndName.isEmpty()){return false;}
 
         Optional<Exercises> byExerciseName = exerciseRepository.findAllByName(addExercise.getExerciseName());
+        if(byExerciseName.isEmpty()){return false;}
 
         Optional<PlanOfExercises> byExerciseAndDay = planOfExercisesRepository.findByExercisesAndWorkoutDay(byExerciseName.get(), byUserAndName.get());
         if(byExerciseAndDay.isPresent()){

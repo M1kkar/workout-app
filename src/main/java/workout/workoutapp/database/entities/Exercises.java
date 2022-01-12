@@ -1,5 +1,6 @@
 package workout.workoutapp.database.entities;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,6 +12,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
+@Data
 public class Exercises {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,6 +26,12 @@ public class Exercises {
 
     public Exercises(String name) {
         this.name = name;
+    }
 
+    public Exercises(Long exercise_id, String link, String name, Category category) {
+        this.exercise_id = exercise_id;
+        this.link = link;
+        this.name = name;
+        this.category = category;
     }
 }

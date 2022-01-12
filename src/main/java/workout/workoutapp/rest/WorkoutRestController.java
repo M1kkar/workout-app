@@ -14,7 +14,6 @@ import workout.workoutapp.service.WorkoutService;
 import workout.workoutapp.transport.converter.WorkoutDaysConverter;
 import workout.workoutapp.transport.dto.UserDto;
 import workout.workoutapp.transport.dto.WorkoutDayDto;
-import workout.workoutapp.transport.moreobjects.WorkoutUserData;
 
 import java.util.List;
 import java.util.Optional;
@@ -46,8 +45,8 @@ public class WorkoutRestController {
     }
 
     @PostMapping(value = "/addWorkoutDay")
-    public ResponseEntity<?> addWorkoutDay(@RequestBody WorkoutUserData workoutUserData) {
-        boolean workoutToSave = workoutService.addWorkoutDay(workoutUserData);
+    public ResponseEntity<?> addWorkoutDay(@RequestBody WorkoutDayDto workoutDayDto) {
+        boolean workoutToSave = workoutService.addWorkoutDay(workoutDayDto);
         if (workoutToSave) {
             return ResponseEntity.ok(HttpStatus.OK);
         } else return ResponseEntity.badRequest().build();

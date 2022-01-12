@@ -11,6 +11,7 @@ import java.time.LocalDate;
 @Entity
 @Builder
 @AllArgsConstructor
+@Data
 public class ProductsInDay {
 
     @Id

@@ -11,7 +11,6 @@ import workout.workoutapp.database.repository.UserRepository;
 import workout.workoutapp.database.repository.WorkoutDayRepository;
 import workout.workoutapp.transport.converter.WorkoutDaysConverter;
 import workout.workoutapp.transport.dto.WorkoutDayDto;
-import workout.workoutapp.transport.moreobjects.WorkoutUserData;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -31,13 +30,11 @@ public class WorkoutService {
         this.planOfExercisesRepository = planOfExercisesRepository;
     }
 
-    public boolean addWorkoutDay(WorkoutUserData workoutUserData) {
-        Optional<User> byEmail = userRepository.findByEmail(workoutUserData.getUserData().getEmail());
-
+    public boolean addWorkoutDay(WorkoutDayDto workoutDayDto) {
+        Optional<User> byEmail = userRepository.findByEmail(workoutDayDto.getUser().getEmail());
         if (byEmail.isPresent()) {
-
             User user = byEmail.get();
-            String name = workoutUserData.getWorkoutData().getTrainingName();
+            String name = workoutDayDto.getTrainingName();
 
             Optional<WorkoutDay> byNameForUser = workoutDayRepository.findByTrainingNameAndUser(name, user);
             if (byNameForUser.isPresent()) {
@@ -45,21 +42,19 @@ public class WorkoutService {
 
             } else {
 
-                LocalDate date = workoutUserData.getWorkoutData().getDateOfTraining();
+                LocalDate date = workoutDayDto.getDateOfTraining();
 
-                workoutUserData.getWorkoutData().setTrainingName(name);
-                workoutUserData.getWorkoutData().setDateOfTraining(date);
-                workoutUserData.getWorkoutData().setUser(user);
+                workoutDayDto.setTrainingName(name);
+                workoutDayDto.setDateOfTraining(date);
+                workoutDayDto.setUser(user);
 
-                WorkoutDay workoutDay = WorkoutDaysConverter.toEntity(workoutUserData.getWorkoutData());
+                WorkoutDay workoutDay = WorkoutDaysConverter.toEntity(workoutDayDto);
                 workoutDayRepository.save(workoutDay);
                 return true;
 
             }
         }
-
         return false;
-
     }
 
     public boolean deleteWorkoutDay(WorkoutDayDto workoutDaysDto) {

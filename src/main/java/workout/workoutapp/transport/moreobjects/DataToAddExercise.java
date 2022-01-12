@@ -13,4 +13,10 @@ public class DataToAddExercise {
     private PlanOfExercises planOfExercises;
     private UserDto user;
 
+    public DataToAddExercise(String exerciseName, String trainingName, PlanOfExercises planOfExercises, UserDto user) {
+        this.exerciseName = exerciseName;
+        this.trainingName = trainingName;
+        this.planOfExercises = planOfExercises;
+        this.user = user;
+    }
 }

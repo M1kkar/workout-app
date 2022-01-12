@@ -2,6 +2,8 @@ package workout.workoutapp.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import workout.workoutapp.config.error.ProductsAlreadyExist;
+import workout.workoutapp.config.error.WorkoutDayNameAlreadyExist;
 import workout.workoutapp.database.entities.Diet;
 import workout.workoutapp.database.entities.Products;
 import workout.workoutapp.database.entities.ProductsInDay;
@@ -30,7 +32,7 @@ public class ProductsService {
     public boolean addProduct(ProductsDto productsDto) {
         Optional<Products> product = productsRepository.findByProductName(productsDto.getProductName());
         if (product.isPresent()) {
-            return false;
+            throw new ProductsAlreadyExist("Product already exist");
         } else {
             float protein = productsDto.getProtein();
             float fat = productsDto.getFat();

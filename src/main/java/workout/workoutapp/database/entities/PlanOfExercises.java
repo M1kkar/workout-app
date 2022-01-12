@@ -8,8 +8,8 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @Entity
-@AllArgsConstructor
 @Builder
+@Data
 public class PlanOfExercises {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -27,7 +27,9 @@ public class PlanOfExercises {
     @JoinColumn(name="exercise_id")
     private Exercises exercises;
 
-    public PlanOfExercises(Long numberOfRepetitions, Long numberOfSeries, Long weight, WorkoutDay workoutDay, Exercises exercises) {
+
+    public PlanOfExercises(Long id, Long numberOfRepetitions, Long numberOfSeries, Long weight, WorkoutDay workoutDay, Exercises exercises) {
+        this.id = id;
         this.numberOfRepetitions = numberOfRepetitions;
         this.numberOfSeries = numberOfSeries;
         this.weight = weight;

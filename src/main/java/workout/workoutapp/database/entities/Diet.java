@@ -10,6 +10,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Data
 public class Diet {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

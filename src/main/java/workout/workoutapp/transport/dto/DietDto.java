@@ -7,13 +7,13 @@ import workout.workoutapp.database.entities.User;
 @Data
 @NoArgsConstructor
 public class DietDto {
-    private Long kcal;
-    private Long protein;
-    private Long fat;
-    private Long carbohydrates;
+    private float kcal;
+    private float protein;
+    private float fat;
+    private float carbohydrates;
     private User user;
 
-    public DietDto(Long kcal, Long protein, Long fat, Long carbohydrates, User user) {
+    public DietDto(float kcal, float protein, float fat, float carbohydrates, User user) {
         this.kcal = kcal;
         this.protein = protein;
         this.fat = fat;

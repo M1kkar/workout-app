@@ -15,6 +15,7 @@ import workout.workoutapp.service.DietService;
 import workout.workoutapp.transport.converter.DietConverter;
 import workout.workoutapp.transport.dto.DietDto;
 import workout.workoutapp.transport.dto.SumOfAll;
+import workout.workoutapp.transport.moreobjects.DataToGenerateDiet;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -82,6 +83,16 @@ public class DietRestController {
         sumOfAll.setCarbohydrate(Precision.round(carbohydrate, 2));
 
         return ResponseEntity.ok(sumOfAll);
+    }
+
+    @PostMapping(value="/generateDiet")
+    public ResponseEntity<?> generateDiet(@RequestBody DataToGenerateDiet dataToGenerateDiet){
+        boolean generate = dietService.createOptimalDiet(dataToGenerateDiet);
+        if(generate){
+            return ResponseEntity.ok(HttpStatus.OK);
+        } else{
+            return ResponseEntity.badRequest().build();
+        }
     }
 
 }

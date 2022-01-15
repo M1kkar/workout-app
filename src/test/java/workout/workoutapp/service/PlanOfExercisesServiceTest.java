@@ -11,6 +11,7 @@ import workout.workoutapp.database.repository.WorkoutDayRepository;
 import workout.workoutapp.transport.converter.UserConverter;
 import workout.workoutapp.transport.dto.UserDto;
 import workout.workoutapp.transport.moreobjects.DataToAddExercise;
+import workout.workoutapp.transport.moreobjects.DataToDeleteExercise;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -51,6 +52,23 @@ public class PlanOfExercisesServiceTest {
         //when
         PlanOfExercises expectedPlanOfExercise = new PlanOfExercises(null,12L,3L,30L,workoutDay,exercises );
         Mockito.verify(planOfExercisesRepository, Mockito.times(1)).save(Mockito.eq(expectedPlanOfExercise));
+    }
+
+    @Test
+    void should_deleteExercise(){
+        //given
+        Category category = new Category(null, "kategoria1");
+        Exercises exercises = new Exercises(1L, "link", "Cwiczenie1", category );
+        WorkoutDay workoutDay = new WorkoutDay(1L , LocalDate.now(), "Trening", null);
+        DataToDeleteExercise dataToDeleteExercise = new DataToDeleteExercise(exercises, workoutDay);
+        PlanOfExercises planOfExercises = new PlanOfExercises(1L,null,null,null,workoutDay,exercises);
+        Mockito.when(workoutDayRepository.findById(dataToDeleteExercise.getWorkoutDay().getWorkout_day_id())).thenReturn(Optional.of(workoutDay));
+        Mockito.when(exerciseRepository.findById(dataToDeleteExercise.getExercises().getExercise_id())).thenReturn(Optional.of(exercises));
+        Mockito.when(planOfExercisesRepository.findByExercisesAndWorkoutDay(exercises,workoutDay)).thenReturn(Optional.of(planOfExercises));
+        //when
+        planOfExercisesService.deleteExerciseFromDay(dataToDeleteExercise);
+        //then
+        Mockito.when(planOfExercisesRepository.findById(1L)).thenReturn(Optional.of(planOfExercises)).thenReturn(null);
     }
 }
 

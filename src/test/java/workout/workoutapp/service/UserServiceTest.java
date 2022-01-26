@@ -1,17 +1,16 @@
 package workout.workoutapp.service;
 
-import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.springframework.boot.test.context.SpringBootTest;
+import workout.workoutapp.config.error.UserAlreadyExistException;
 import workout.workoutapp.database.entities.User;
 import workout.workoutapp.database.repository.UserRepository;
 import workout.workoutapp.transport.converter.UserConverter;
 import workout.workoutapp.transport.dto.UserDto;
 
 import java.util.Optional;
-import java.util.regex.Matcher;
 
 
 class UserServiceTest {
@@ -28,6 +27,8 @@ class UserServiceTest {
         this.bodyMeasurementService = Mockito.mock(BodyMeasurementService.class);
         this.dietService = Mockito.mock(DietService.class);
         this.userService = new UserService(userRepository, bodyMeasurementService, dietService);
+        userService = Mockito.spy(new UserService(userRepository, bodyMeasurementService, dietService));
+
     }
 
     @Test
@@ -42,13 +43,15 @@ class UserServiceTest {
         User expectedUser = new User(null, "mail@mail.com", "123456", "Karol", "Mik");
         Mockito.verify(userRepository, Mockito.times(1)).save(Mockito.eq(expectedUser));
     }
+
+
     @Test
-    void should_RegisterExistUser(){
-        //given
+    void should_thrownUserAlreadyExistException() throws UserAlreadyExistException {
         User user = new User(null, "mail@mail.com", "123456", "Karol", "Mik");
-        Mockito.when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
         UserDto userDto = UserConverter.toDto(user);
-        //then
-        userService.registerNewAccount(userDto);
+        Mockito.doThrow(UserAlreadyExistException.class).when(userService).registerNewAccount(userDto);
+
+        Assertions.assertThrows(UserAlreadyExistException.class, ()->userService.registerNewAccount(userDto));
+
     }
 }

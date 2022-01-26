@@ -2,7 +2,7 @@ package workout.workoutapp.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import workout.workoutapp.config.error.WorkoutDayNameAlreadyExist;
+import workout.workoutapp.config.error.WorkoutDayException;
 import workout.workoutapp.database.entities.PlanOfExercises;
 import workout.workoutapp.database.entities.User;
 import workout.workoutapp.database.entities.WorkoutDay;
@@ -30,15 +30,14 @@ public class WorkoutService {
         this.planOfExercisesRepository = planOfExercisesRepository;
     }
 
-    public boolean addWorkoutDay(WorkoutDayDto workoutDayDto) {
+    public void addWorkoutDay(WorkoutDayDto workoutDayDto) throws WorkoutDayException {
         Optional<User> byEmail = userRepository.findByEmail(workoutDayDto.getUser().getEmail());
-        if (byEmail.isPresent()) {
             User user = byEmail.get();
             String name = workoutDayDto.getTrainingName();
 
             Optional<WorkoutDay> byNameForUser = workoutDayRepository.findByTrainingNameAndUser(name, user);
             if (byNameForUser.isPresent()) {
-                throw new WorkoutDayNameAlreadyExist("Name already exist");
+                throw new WorkoutDayException("Name already exist");
 
             } else {
 
@@ -50,12 +49,9 @@ public class WorkoutService {
 
                 WorkoutDay workoutDay = WorkoutDaysConverter.toEntity(workoutDayDto);
                 workoutDayRepository.save(workoutDay);
-                return true;
 
             }
         }
-        return false;
-    }
 
     public boolean deleteWorkoutDay(WorkoutDayDto workoutDaysDto) {
         Optional<User> byEmail = userRepository.findByEmail(workoutDaysDto.getUser().getEmail());

@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import workout.workoutapp.config.error.DietDoesNotExist;
+import workout.workoutapp.config.error.UserDoesNotExistException;
 import workout.workoutapp.database.entities.Diet;
 import workout.workoutapp.database.entities.ProductsInDay;
 import workout.workoutapp.database.entities.User;
@@ -49,14 +51,9 @@ public class DietRestController {
     }
 
     @PostMapping(value = "/updateDiet")
-    public ResponseEntity<?> updateDiet(@RequestBody DietDto dietDto) {
-        boolean update = dietService.updateDiet(dietDto);
-
-        if (update) {
-            return ResponseEntity.ok(HttpStatus.OK);
-        } else {
-            return ResponseEntity.badRequest().build();
-        }
+    public ResponseEntity<?> updateDiet(@RequestBody DietDto dietDto) throws UserDoesNotExistException {
+        dietService.updateDiet(dietDto);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @GetMapping(value = "getSumOfAll/{date}/{email}")
@@ -74,7 +71,6 @@ public class DietRestController {
         double carbohydrate = all.stream().mapToDouble(ProductsInDay::getCarbohydratePortion).sum();
 
 
-
         SumOfAll sumOfAll = new SumOfAll();
 
         sumOfAll.setKcal(Precision.round(kcal, 2));
@@ -85,14 +81,12 @@ public class DietRestController {
         return ResponseEntity.ok(sumOfAll);
     }
 
-    @PostMapping(value="/generateDiet")
-    public ResponseEntity<?> generateDiet(@RequestBody DataToGenerateDiet dataToGenerateDiet){
-        boolean generate = dietService.createOptimalDiet(dataToGenerateDiet);
-        if(generate){
-            return ResponseEntity.ok(HttpStatus.OK);
-        } else{
-            return ResponseEntity.badRequest().build();
-        }
+    @PostMapping(value = "/generateDiet")
+    public ResponseEntity<?> generateDiet(@RequestBody DataToGenerateDiet dataToGenerateDiet) throws UserDoesNotExistException, DietDoesNotExist {
+
+        dietService.createOptimalDiet(dataToGenerateDiet);
+        return ResponseEntity.ok(HttpStatus.OK);
+
     }
 
 }

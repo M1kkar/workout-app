@@ -16,13 +16,13 @@ import workout.workoutapp.transport.dto.UserDto;
 
 @RestController
 @RequiredArgsConstructor
-public class AuthRestController {
+public class UserRestController {
 
     private UserService userService;
 
 
     @Autowired
-    public AuthRestController(UserService userService) {
+    public UserRestController(UserService userService) {
         this.userService = userService;
 
 

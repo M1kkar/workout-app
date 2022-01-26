@@ -9,6 +9,6 @@ import java.util.*;
 
 public interface ProductsInDayRepository extends JpaRepository<ProductsInDay, Long> {
 
-    List<ProductsInDay> findAllByDate(LocalDate date);
+
     List<ProductsInDay> findAllByDateAndDiet(LocalDate date, Diet diet);
 }

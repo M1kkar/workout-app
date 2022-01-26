@@ -2,6 +2,9 @@ package workout.workoutapp.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import workout.workoutapp.config.error.ExercisesException;
+import workout.workoutapp.config.error.UserDoesNotExistException;
+import workout.workoutapp.config.error.WorkoutDayException;
 import workout.workoutapp.database.entities.Exercises;
 import workout.workoutapp.database.entities.PlanOfExercises;
 import workout.workoutapp.database.entities.User;
@@ -31,20 +34,18 @@ public class PlanOfExercisesService {
         this.exerciseRepository = exerciseRepository;
     }
 
-    public boolean addExercisesToDay(DataToAddExercise addExercise){
+    public void addExercisesToDay(DataToAddExercise addExercise) throws UserDoesNotExistException, WorkoutDayException, ExercisesException{
         Optional<User> byEmail = userRepository.findByEmail(addExercise.getUser().getEmail());
-        if(byEmail.isEmpty()){return false;}
+        if(byEmail.isEmpty()){throw new UserDoesNotExistException("user does not exist");}
 
         Optional<WorkoutDay> byUserAndName = workoutDayRepository.findByTrainingNameAndUser(addExercise.getTrainingName(), byEmail.get());
-        if(byUserAndName.isEmpty()){return false;}
+        if(byUserAndName.isEmpty()){throw new WorkoutDayException("workout day does not exist");}
 
         Optional<Exercises> byExerciseName = exerciseRepository.findAllByName(addExercise.getExerciseName());
-        if(byExerciseName.isEmpty()){return false;}
+        if(byExerciseName.isEmpty()){throw new ExercisesException("exercise does not exist");}
 
         Optional<PlanOfExercises> byExerciseAndDay = planOfExercisesRepository.findByExercisesAndWorkoutDay(byExerciseName.get(), byUserAndName.get());
-        if(byExerciseAndDay.isPresent()){
-            return false;
-        }
+        if(byExerciseAndDay.isPresent()){throw new ExercisesException("exercise already added");}
 
         Long weight = addExercise.getPlanOfExercises().getWeight();
         Long numberOfRepetition = addExercise.getPlanOfExercises().getNumberOfRepetitions();
@@ -59,7 +60,7 @@ public class PlanOfExercisesService {
                 .build();
 
         planOfExercisesRepository.save(planOfExercisesBuilder);
-        return true;
+
     }
 
     public boolean deleteExerciseFromDay(DataToDeleteExercise dataToDeleteExercise){

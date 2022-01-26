@@ -3,6 +3,7 @@ package workout.workoutapp.service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import workout.workoutapp.config.error.UserDoesNotExistException;
 import workout.workoutapp.database.entities.*;
 import workout.workoutapp.database.repository.ExerciseRepository;
 import workout.workoutapp.database.repository.PlanOfExercisesRepository;
@@ -34,7 +35,7 @@ public class PlanOfExercisesServiceTest {
     }
 
     @Test
-    void should_addNewExerciseToDay(){
+    void should_addNewExerciseToDay() throws UserDoesNotExistException {
         //given
         Category category = new Category(null, "kategoria1");
         Exercises exercises = new Exercises(null, "link", "Cwiczenie1", category );

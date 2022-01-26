@@ -10,6 +10,7 @@ import workout.workoutapp.database.entities.User;
 import workout.workoutapp.database.repository.DietRepository;
 import workout.workoutapp.database.repository.ProductsInDayRepository;
 import workout.workoutapp.database.repository.ProductsRepository;
+import workout.workoutapp.database.repository.UserRepository;
 import workout.workoutapp.transport.converter.ProductsConverter;
 import workout.workoutapp.transport.dto.ProductsDto;
 
@@ -22,13 +23,15 @@ public class ProductsServiceTest {
     private DietRepository dietRepository;
     private ProductsInDayRepository productsInDayRepository;
     private ProductsService productsService;
+    private UserRepository userRepository;
 
     @BeforeEach
     void setUp(){
         this.productsRepository = Mockito.mock(ProductsRepository.class);
         this.dietRepository = Mockito.mock(DietRepository.class);
         this.productsInDayRepository = Mockito.mock(ProductsInDayRepository.class);
-        this.productsService = new ProductsService(productsRepository, dietRepository, productsInDayRepository);
+        this.userRepository = Mockito.mock(UserRepository.class);
+        this.productsService = new ProductsService(productsRepository, dietRepository, productsInDayRepository, userRepository);
     }
 
     @Test

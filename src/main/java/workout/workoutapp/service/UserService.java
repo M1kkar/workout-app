@@ -28,11 +28,12 @@ public class UserService {
     }
 
     public boolean registerNewAccount(UserDto userToRegister) throws UserAlreadyExistException {
-        Optional<User> byEmail = findByEmail(userToRegister.getEmail());
+        Optional<User> byEmail = userRepository.findByEmail(userToRegister.getEmail());
 
         if (byEmail.isPresent()) {
             throw new UserAlreadyExistException("User exists");
         }
+
         String password = userToRegister.getPassword();
         userToRegister.setPassword(password);
         User userFromDto = UserConverter.toEntity(userToRegister);
@@ -43,7 +44,7 @@ public class UserService {
     }
 
     public User loginUser(String email, String password) throws UserDoesNotExistException, UserPasswordException {
-        return findByEmail(email).map(u -> {
+        return userRepository.findByEmail(email).map(u -> {
             if (!(Objects.equals(password, u.getPassword()))) {
                 throw new UserPasswordException("Password incorrect");
             }
@@ -52,7 +53,5 @@ public class UserService {
     }
 
 
-    private Optional<User> findByEmail(String email) {
-        return userRepository.findByEmail(email);
-    }
+
 }

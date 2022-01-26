@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import workout.workoutapp.config.error.WorkoutDayException;
 import workout.workoutapp.database.entities.User;
 import workout.workoutapp.database.repository.UserRepository;
 import workout.workoutapp.database.repository.WorkoutDayRepository;
@@ -45,22 +46,21 @@ public class WorkoutRestController {
     }
 
     @PostMapping(value = "/addWorkoutDay")
-    public ResponseEntity<?> addWorkoutDay(@RequestBody WorkoutDayDto workoutDayDto) {
-        boolean workoutToSave = workoutService.addWorkoutDay(workoutDayDto);
-        if (workoutToSave) {
-            return ResponseEntity.ok(HttpStatus.OK);
-        } else return ResponseEntity.badRequest().build();
+    public ResponseEntity<?> addWorkoutDay(@RequestBody WorkoutDayDto workoutDayDto) throws WorkoutDayException {
+        workoutService.addWorkoutDay(workoutDayDto);
+        return ResponseEntity.ok(HttpStatus.OK);
+
     }
 
     @PostMapping(value = "/deleteDay")
-    public ResponseEntity<?> deleteExercise(@RequestBody WorkoutDayDto workoutDaysDto) {
+    public ResponseEntity<?> deleteWorkoutDay(@RequestBody WorkoutDayDto workoutDaysDto) {
         boolean trainingToDelete = workoutService.deleteWorkoutDay(workoutDaysDto);
 
-        if(trainingToDelete){
+        if (trainingToDelete) {
             return ResponseEntity.ok(HttpStatus.OK);
-        } else{
+        } else {
             return ResponseEntity.badRequest().build();
         }
 
-}
+    }
 }

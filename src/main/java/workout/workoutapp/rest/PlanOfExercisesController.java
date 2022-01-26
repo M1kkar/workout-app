@@ -4,6 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import workout.workoutapp.config.error.ExercisesException;
+import workout.workoutapp.config.error.UserAlreadyExistException;
+import workout.workoutapp.config.error.UserDoesNotExistException;
+import workout.workoutapp.config.error.WorkoutDayException;
 import workout.workoutapp.database.entities.PlanOfExercises;
 import workout.workoutapp.database.entities.User;
 import workout.workoutapp.database.entities.WorkoutDay;
@@ -50,13 +54,10 @@ public class PlanOfExercisesController {
     }
 
     @PostMapping(value = "/addExercises")
-    public ResponseEntity<?> addExercises(@RequestBody DataToAddExercise addExercise) {
-        boolean add = planOfExercisesService.addExercisesToDay(addExercise);
-        if (add) {
-            return ResponseEntity.ok(HttpStatus.OK);
-        } else {
-            return ResponseEntity.badRequest().build();
-        }
+    public ResponseEntity<?> addExercises(@RequestBody DataToAddExercise addExercise) throws WorkoutDayException, ExercisesException, UserDoesNotExistException {
+        planOfExercisesService.addExercisesToDay(addExercise);
+        return ResponseEntity.ok(HttpStatus.OK);
+
     }
 
     @PostMapping(value = "/deleteExercise")

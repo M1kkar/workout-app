@@ -10,12 +10,14 @@ import workout.workoutapp.database.repository.PlanOfExercisesRepository;
 import workout.workoutapp.database.repository.UserRepository;
 import workout.workoutapp.database.repository.WorkoutDayRepository;
 import workout.workoutapp.transport.converter.WorkoutDaysConverter;
+import workout.workoutapp.transport.dto.UserDto;
 import workout.workoutapp.transport.dto.WorkoutDayDto;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class WorkoutService {
@@ -30,6 +32,11 @@ public class WorkoutService {
         this.planOfExercisesRepository = planOfExercisesRepository;
     }
 
+    public List<WorkoutDayDto> allWorkoutDays(UserDto userDto){
+        Optional<User> byEmail = userRepository.findByEmail(userDto.getEmail());
+
+        return workoutDayRepository.findAllByUser(byEmail.get()).stream().map((WorkoutDaysConverter::toDto)).toList();
+    }
     public void addWorkoutDay(WorkoutDayDto workoutDayDto) throws WorkoutDayException {
         Optional<User> byEmail = userRepository.findByEmail(workoutDayDto.getUser().getEmail());
             User user = byEmail.get();

@@ -27,27 +27,19 @@ import java.util.Optional;
 @RequestMapping(value = "/myDiet")
 public class DietRestController {
 
-    private final UserRepository userRepository;
-    private final DietRepository dietRepository;
+
     private final DietService dietService;
-    private final ProductsInDayRepository productsInDayRepository;
+
 
     @Autowired
-    public DietRestController(UserRepository userRepository, DietRepository dietRepository, DietService dietService, ProductsInDayRepository productsInDayRepository) {
-        this.userRepository = userRepository;
-        this.dietRepository = dietRepository;
+    public DietRestController(DietService dietService) {
         this.dietService = dietService;
-        this.productsInDayRepository = productsInDayRepository;
     }
 
     @GetMapping(value = "/getDiet/{email}")
     public ResponseEntity<DietDto> getDiet(@PathVariable String email) {
-        Optional<User> byEmail = userRepository.findByEmail(email);
-
-        Optional<Diet> byUser = dietRepository.findByUser(byEmail.get());
-        DietDto dietdto = DietConverter.toDto(byUser.get());
-
-        return ResponseEntity.ok(dietdto);
+        DietDto dietDto = dietService.getDiet(email);
+        return ResponseEntity.ok(dietDto);
     }
 
     @PostMapping(value = "/updateDiet")
@@ -58,26 +50,7 @@ public class DietRestController {
 
     @GetMapping(value = "getSumOfAll/{date}/{email}")
     public ResponseEntity<SumOfAll> getSumOfAll(@PathVariable String date, @PathVariable String email) {
-        LocalDate date1 = LocalDate.parse(date);
-        Optional<User> byEmail = userRepository.findByEmail(email);
-        Optional<Diet> byUser = dietRepository.findByUser(byEmail.get());
-        List<ProductsInDay> all = productsInDayRepository.findAllByDateAndDiet(date1, byUser.get());
-
-
-        double kcal = all.stream().mapToDouble(ProductsInDay::getKcalPortion).sum();
-        double protein = all.stream().mapToDouble(ProductsInDay::getProteinPortion).sum();
-        double fat = all.stream().mapToDouble(ProductsInDay::getFatPortion).sum();
-
-        double carbohydrate = all.stream().mapToDouble(ProductsInDay::getCarbohydratePortion).sum();
-
-
-        SumOfAll sumOfAll = new SumOfAll();
-
-        sumOfAll.setKcal(Precision.round(kcal, 2));
-        sumOfAll.setProtein(Precision.round(protein, 2));
-        sumOfAll.setFat(Precision.round(fat, 2));
-        sumOfAll.setCarbohydrate(Precision.round(carbohydrate, 2));
-
+        SumOfAll sumOfAll = dietService.getSumOfAllProducts(date, email);
         return ResponseEntity.ok(sumOfAll);
     }
 

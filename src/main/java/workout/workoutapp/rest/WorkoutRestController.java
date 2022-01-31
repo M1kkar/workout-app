@@ -25,24 +25,18 @@ import java.util.stream.Collectors;
 
 public class WorkoutRestController {
 
-    private final WorkoutDayRepository workoutDayRepository;
-    private final UserRepository userRepository;
+
     private final WorkoutService workoutService;
 
     @Autowired
-    public WorkoutRestController(WorkoutDayRepository workoutDayRepository, UserRepository userRepository, WorkoutService workoutService) {
-        this.workoutDayRepository = workoutDayRepository;
-        this.userRepository = userRepository;
+    public WorkoutRestController(WorkoutService workoutService) {
         this.workoutService = workoutService;
     }
 
     @PostMapping(value = "/workoutDays")
     public ResponseEntity<List<WorkoutDayDto>> allWorkoutDays(@RequestBody UserDto userDto) {
-        Optional<User> byEmail = userRepository.findByEmail(userDto.getEmail());
-
-        List<WorkoutDayDto> allDays = workoutDayRepository.findAllByUser(byEmail.get()).stream().map(WorkoutDaysConverter::toDto).collect(Collectors.toList());
-
-        return ResponseEntity.ok(allDays);
+        List<WorkoutDayDto> workoutDayDto = workoutService.allWorkoutDays(userDto);
+        return ResponseEntity.ok(workoutDayDto);
     }
 
     @PostMapping(value = "/addWorkoutDay")

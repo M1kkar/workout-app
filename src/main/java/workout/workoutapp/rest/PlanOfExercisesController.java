@@ -5,51 +5,32 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import workout.workoutapp.config.error.ExercisesException;
-import workout.workoutapp.config.error.UserAlreadyExistException;
 import workout.workoutapp.config.error.UserDoesNotExistException;
 import workout.workoutapp.config.error.WorkoutDayException;
-import workout.workoutapp.database.entities.PlanOfExercises;
-import workout.workoutapp.database.entities.User;
-import workout.workoutapp.database.entities.WorkoutDay;
-import workout.workoutapp.database.repository.PlanOfExercisesRepository;
-import workout.workoutapp.database.repository.UserRepository;
-import workout.workoutapp.database.repository.WorkoutDayRepository;
 import workout.workoutapp.service.PlanOfExercisesService;
-import workout.workoutapp.transport.converter.PlanOfExercisesConverter;
 import workout.workoutapp.transport.dto.PlanOfExercisesDto;
 import workout.workoutapp.transport.moreobjects.DataToAddExercise;
 import workout.workoutapp.transport.moreobjects.DataToDeleteExercise;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/planOfExercises")
 public class PlanOfExercisesController {
 
-    private final PlanOfExercisesRepository planOfExercisesRepository;
-    private final WorkoutDayRepository workoutDayRepository;
-    private final UserRepository userRepository;
+
     private final PlanOfExercisesService planOfExercisesService;
 
     @Autowired
-    public PlanOfExercisesController(PlanOfExercisesRepository planOfExercisesRepository, WorkoutDayRepository workoutDayRepository, UserRepository userRepository, PlanOfExercisesService planOfExercisesService) {
-        this.planOfExercisesRepository = planOfExercisesRepository;
-        this.workoutDayRepository = workoutDayRepository;
-        this.userRepository = userRepository;
+    public PlanOfExercisesController(PlanOfExercisesService planOfExercisesService) {
+
         this.planOfExercisesService = planOfExercisesService;
 
     }
 
     @PostMapping(value = "/getPlan")
     public ResponseEntity<List<PlanOfExercisesDto>> getPlanForTraining(@RequestParam String trainingName, @RequestParam String email) {
-        Optional<User> byEmail = userRepository.findByEmail(email);
-        Optional<WorkoutDay> byNameAndUser = workoutDayRepository.findByTrainingNameAndUser(trainingName, byEmail.get());
-
-        List<PlanOfExercises> getAllForTraining = planOfExercisesRepository.findAllByWorkoutDay(byNameAndUser.get());
-
-        List<PlanOfExercisesDto> toDto = getAllForTraining.stream().map(PlanOfExercisesConverter::toDto).toList();
-
+        List<PlanOfExercisesDto> toDto = planOfExercisesService.getPlanForTraining(trainingName, email);
         return ResponseEntity.ok(toDto);
     }
 

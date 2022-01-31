@@ -1,5 +1,6 @@
 package workout.workoutapp.service;
 
+import org.apache.commons.math3.stat.descriptive.summary.Sum;
 import org.apache.commons.math3.util.Precision;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -7,18 +8,25 @@ import workout.workoutapp.config.error.BadDataForDietException;
 import workout.workoutapp.config.error.DietDoesNotExist;
 import workout.workoutapp.config.error.UserDoesNotExistException;
 import workout.workoutapp.database.entities.Diet;
+import workout.workoutapp.database.entities.ProductsInDay;
 import workout.workoutapp.database.entities.User;
 import workout.workoutapp.database.repository.DietRepository;
+import workout.workoutapp.database.repository.ProductsInDayRepository;
 import workout.workoutapp.database.repository.UserRepository;
+import workout.workoutapp.transport.converter.DietConverter;
 import workout.workoutapp.transport.dto.DietDto;
+import workout.workoutapp.transport.dto.SumOfAll;
 import workout.workoutapp.transport.moreobjects.DataToGenerateDiet;
 
-import java.util.Optional;
+import java.time.LocalDate;
+import java.util.*;
+
 
 @Service
 public class DietService {
     private final DietRepository dietRepository;
     private final UserRepository userRepository;
+    private final ProductsInDayRepository productsInDayRepository;
     private final int proteinKcal = 4;
     private final int fatKcal = 9;
     private final int carbohydrateKcal = 4;
@@ -33,10 +41,18 @@ public class DietService {
 
 
     @Autowired
-    public DietService(DietRepository dietRepository, UserRepository userRepository) {
+    public DietService(DietRepository dietRepository, UserRepository userRepository, ProductsInDayRepository productsInDayRepository) {
         this.dietRepository = dietRepository;
         this.userRepository = userRepository;
+        this.productsInDayRepository = productsInDayRepository;
+    }
 
+    public DietDto getDiet(String email){
+        Optional<User> byEmail = userRepository.findByEmail(email);
+        Optional<Diet> byUser = dietRepository.findByUser(byEmail.get());
+        DietDto dietDto = DietConverter.toDto(byUser.get());
+
+        return dietDto;
     }
 
     public void addDefaultDiet(User user) {
@@ -113,6 +129,28 @@ public class DietService {
         diet.setCarbohydrates(Precision.round(carbohydrate, 1));
 
         dietRepository.save(diet);
+    }
+
+    public SumOfAll getSumOfAllProducts(String date, String email){
+        LocalDate localDate = LocalDate.parse(date);
+        Optional<User> byEmail = userRepository.findByEmail(email);
+        Optional<Diet> byUser = dietRepository.findByUser(byEmail.get());
+        List<ProductsInDay> all = productsInDayRepository.findAllByDateAndDiet(localDate, byUser.get());
+
+        double kcal = all.stream().mapToDouble(ProductsInDay::getKcalPortion).sum();
+        double protein = all.stream().mapToDouble(ProductsInDay::getProteinPortion).sum();
+        double fat = all.stream().mapToDouble(ProductsInDay::getFatPortion).sum();
+        double carbohydrate = all.stream().mapToDouble(ProductsInDay::getCarbohydratePortion).sum();
+
+        SumOfAll sumOfAll = new SumOfAll();
+
+        sumOfAll.setKcal(Precision.round(kcal, 2));
+        sumOfAll.setProtein(Precision.round(protein, 2));
+        sumOfAll.setFat(Precision.round(fat, 2));
+        sumOfAll.setCarbohydrate(Precision.round(carbohydrate, 2));
+
+        return sumOfAll;
+
     }
 
 }

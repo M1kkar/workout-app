@@ -13,9 +13,12 @@ import workout.workoutapp.database.repository.ExerciseRepository;
 import workout.workoutapp.database.repository.PlanOfExercisesRepository;
 import workout.workoutapp.database.repository.UserRepository;
 import workout.workoutapp.database.repository.WorkoutDayRepository;
+import workout.workoutapp.transport.converter.PlanOfExercisesConverter;
+import workout.workoutapp.transport.dto.PlanOfExercisesDto;
 import workout.workoutapp.transport.moreobjects.DataToAddExercise;
 import workout.workoutapp.transport.moreobjects.DataToDeleteExercise;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -34,18 +37,36 @@ public class PlanOfExercisesService {
         this.exerciseRepository = exerciseRepository;
     }
 
-    public void addExercisesToDay(DataToAddExercise addExercise) throws UserDoesNotExistException, WorkoutDayException, ExercisesException{
+    public List<PlanOfExercisesDto> getPlanForTraining(String trainingName, String email) {
+        Optional<User> byEmail = userRepository.findByEmail(email);
+        Optional<WorkoutDay> byNameAndUser = workoutDayRepository.findByTrainingNameAndUser(trainingName, byEmail.get());
+
+        List<PlanOfExercises> getAllForTraining = planOfExercisesRepository.findAllByWorkoutDay(byNameAndUser.get());
+
+        List<PlanOfExercisesDto> toDto = getAllForTraining.stream().map(PlanOfExercisesConverter::toDto).toList();
+        return toDto;
+    }
+
+    public void addExercisesToDay(DataToAddExercise addExercise) throws UserDoesNotExistException, WorkoutDayException, ExercisesException {
         Optional<User> byEmail = userRepository.findByEmail(addExercise.getUser().getEmail());
-        if(byEmail.isEmpty()){throw new UserDoesNotExistException("user does not exist");}
+        if (byEmail.isEmpty()) {
+            throw new UserDoesNotExistException("user does not exist");
+        }
 
         Optional<WorkoutDay> byUserAndName = workoutDayRepository.findByTrainingNameAndUser(addExercise.getTrainingName(), byEmail.get());
-        if(byUserAndName.isEmpty()){throw new WorkoutDayException("workout day does not exist");}
+        if (byUserAndName.isEmpty()) {
+            throw new WorkoutDayException("workout day does not exist");
+        }
 
         Optional<Exercises> byExerciseName = exerciseRepository.findAllByName(addExercise.getExerciseName());
-        if(byExerciseName.isEmpty()){throw new ExercisesException("exercise does not exist");}
+        if (byExerciseName.isEmpty()) {
+            throw new ExercisesException("exercise does not exist");
+        }
 
         Optional<PlanOfExercises> byExerciseAndDay = planOfExercisesRepository.findByExercisesAndWorkoutDay(byExerciseName.get(), byUserAndName.get());
-        if(byExerciseAndDay.isPresent()){throw new ExercisesException("exercise already added");}
+        if (byExerciseAndDay.isPresent()) {
+            throw new ExercisesException("exercise already added");
+        }
 
         Long weight = addExercise.getPlanOfExercises().getWeight();
         Long numberOfRepetition = addExercise.getPlanOfExercises().getNumberOfRepetitions();
@@ -63,7 +84,7 @@ public class PlanOfExercisesService {
 
     }
 
-    public boolean deleteExerciseFromDay(DataToDeleteExercise dataToDeleteExercise){
+    public boolean deleteExerciseFromDay(DataToDeleteExercise dataToDeleteExercise) {
         Optional<WorkoutDay> workoutDay = workoutDayRepository.findById(dataToDeleteExercise.getWorkoutDay().getWorkout_day_id());
         Optional<Exercises> exercises = exerciseRepository.findById(dataToDeleteExercise.getExercises().getExercise_id());
 
